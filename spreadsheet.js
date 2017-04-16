@@ -237,4 +237,77 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         }
         return [parseInt(cell_parts[2]), column];
     }
-   
+    /**
+     * Callback for click events on spreadsheet. Determines if the event
+     * occurred on a spreadsheet cell. If so, it opens a prompt for a
+     * new value for the cell and updates the cell and the associated form
+     * hidden input value.
+     * @param Object event click event object
+     */
+    p.updateCell = function (event) {
+        var type = (event.target.innerHTML == "+") ? 'add' :
+            (event.target.innerHTML == "-") ? 'delete' :'cell';
+        var target = (type == 'cell') ? event.target :
+            event.target.parentElement;
+        var row = target.parentElement.rowIndex - 1;
+        var column = target.cellIndex - 1;
+        var length = data.length;
+        var width = data[0].length;
+        if (row >= 0 && column >= 0) {
+            var new_value = prompt(self.letterRepresentation(column) +
+                (row + 1), data[row][column]);
+            if (new_value != null) {
+                data[row][column] = new_value;
+                data_elt = document.getElementById(self.data_id);
+                data_elt.value = JSON.stringify(data);
+                event.target.innerHTML = new_value;
+            }
+        } else if (type == 'add' && row == -1 && column >= 0) {
+            for (var i = 0; i < length; i++) {
+                for (var j = width; j > column + 1; j--) {
+                    data[i][j] = data[i][j-1];
+                }
+                data[i][column + 1] = "";
+            }
+            data_elt = document.getElementById(self.data_id);
+            data_elt.value = JSON.stringify(data);
+            self.draw();
+        } else if (type == 'add' && row >= 0 && column == -1) {
+            data[length] = [];
+            for (var i = length; i > row + 1; i--) {
+                for (var j = 0; j < width; j++) {
+                    data[i][j] = data[i - 1][j];
+                }
+            }
+            for (var j = 0; j < width; j++) {
+                data[row + 1][j] = "";
+            }
+            data_elt = document.getElementById(self.data_id);
+            data_elt.value = JSON.stringify(data);
+            self.draw();
+        } else if (type == 'delete' && row == -1 && column >= 0) {
+            for (var i = 0; i < length; i++) {
+                for (var j = column ; j < width - 1; j++) {
+                    data[i][j] = data[i][j + 1];
+                }
+                data[i].pop();
+            }
+            data_elt = document.getElementById(self.data_id);
+            data_elt.value = JSON.stringify(data);
+            self.draw();
+        } else if (type == 'delete' && row >= 0 && column == -1) {
+            for (var i = row; i < length - 1; i++) {
+                    data[i] = data[i + 1];
+            }
+            data.pop();
+            data_elt = document.getElementById(self.data_id);
+            data_elt.value = JSON.stringify(data);
+            self.draw();
+        }
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    if (this.mode == 'write') {
+        container.addEventListener("click", self.updateCell, true);
+    }
+}
