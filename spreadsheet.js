@@ -109,3 +109,132 @@ function Spreadsheet(spreadsheet_id, supplied_data)
     }
 
     
+    /**
+     * Calculates the value of a cell expression in a spreadsheet. Currently,
+     * a cell expression is either an integer literal, a non-scientific notation
+     * float litera, a cell name literal, or of the form
+     * (cell_exp1 op cell_exp2) where cell_exp1 and cell_exp2 are cell
+     * expressions that don't evaluate to strings and op is one of +, -, *, /
+     * whitespace is ignore in cell expressions
+     *
+     * @param String cell_expression a string representing a formula to
+     * calculate from a spreadsheet file
+     * @param Number location character position in cell_expression to start
+     *      evaluating from
+     * @return mixed the value of the cell or the String 'NaN' if the expression
+     *    was not evaluatable
+     */
+    p.evaluateCell = function(cell_expression, location)
+    {
+        var out = [location, false];
+        if (location >= cell_expression.length) {
+            return out;
+        }
+        location = self.skipWhitespace(cell_expression, location);
+        out[0] = location;
+        if(cell_expression.charAt(location) == "(") {
+            left_out = self.evaluateCell(cell_expression, location + 1);
+            if (!['+', '-', '*', '/'].includes(
+                cell_expression.charAt(left_out[0])) ||
+                typeof left_out[1] == 'String') {
+                out[0] = left_out[0];
+                out[1] = "NaN";
+                return out;
+            }
+            right_out = self.evaluateCell(cell_expression, left_out[0] + 1);
+            if (cell_expression.charAt(right_out[0]) != ')' ||
+                typeof right_out[1] == 'String') {
+                out[0] = right_out[0];
+                out[1] = "NaN";
+                return out;
+            }
+            out[0] = self.skipWhitespace(cell_expression, right_out[0] + 1);
+            out[1] = eval("" + left_out[1] +
+                cell_expression.charAt(left_out[0]) + right_out[1]);
+            return out;
+        } else if (cell_expression.charAt(location) == "-") {
+            sub_out = self.evaluateCell(cell_expression, location + 1);
+            if (sub_out[1] == 'NaN') {
+                return sub_out;
+            }
+            out[0] = self.skipWhitespace(cell_expression, sub_out[0]);
+            out[1] = - sub_out[1];
+            return out;
+        }
+        var rest = cell_expression.substring(location);
+        var value = rest.match(/^\-?\d+(\.\d*)?|^\-?\.\d+/);
+        if (value !== null) {
+            out[0] = self.skipWhitespace(cell_expression,location +
+                value[0].length +1);
+            out[1] = (value[0].match(/\./) == '.') ? parseFloat(value[0]) :
+                parseInt(value[0]);
+            return out;
+        }
+        value = rest.match(/^[A-Z]+\d+/);
+        if (value !== null) {
+            out[0] = self.skipWhitespace(cell_expression,location +
+                value.length + 1);
+            var row_col = self.cellNameAsRowColumn(value.toString().trim());
+            out[1] = data[row_col[0] - 1][row_col[1]];
+        }
+        return out;
+    }
+    /**
+     * Returns the position of the first non-whitespace character after
+     * location in the string (returns location if location is non-WS or
+     * if no location found).
+     *
+     * @param String haystack string to search in
+     * @param Number location where to start search from
+     * @return Number position of non-WS character
+     */
+    p.skipWhitespace = function(haystack, location)
+    {
+        var next_loc = haystack.substring(location).search(/\S/);
+        if (next_loc > 0) {
+            location += next_loc;
+        }
+        return location;
+    }
+    /**
+     * Converts a decimal number to a base 26 number string using A-Z for 0-25.
+     * Used where drawing column headers for spreadsheet
+     * @param Number number the value to convert to base 26
+     * @return String result of conversion
+     */
+    p.letterRepresentation = function(number)
+    {
+        var pre_letter;
+        var out = "";
+        do {
+            pre_letter = number % 26;
+            number = Math.floor(number/26);
+            out += String.fromCharCode(65 + pre_letter);
+        } while (number > 25);
+        return out;
+    }
+    /**
+     * Given a cell name string, such as B4, converts it to an ordered pair
+     * suitable for lookup in the spreadsheets data array. On B4,
+     * [3, 1] would be returned.
+     *
+     * @param String cell_name name to convert
+     * @return Array ordered pair corresponding to name
+     */
+    p.cellNameAsRowColumn = function(cell_name)
+    {
+        var cell_parts = cell_name.match(/^([A-Z]+)(\d+)$/);
+        if (cell_parts == null) {
+            return null;
+        }
+        var column_string = cell_parts[1];
+        var len = column_string.length;
+        var column = 0;
+        var shift = 1;
+        for (var i = 0; i < len; i++) {
+            column += (column_string.charCodeAt(i) - 65) * shift;
+            shift = 26;
+        }
+        return [parseInt(cell_parts[2]), column];
+    }
+   
