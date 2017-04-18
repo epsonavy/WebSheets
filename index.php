@@ -20,7 +20,7 @@ require_once "vendor/autoload.php";
 
 // Included all MVC modules
 
-include 'src/models/landing.php';
+//include 'src/models/landing.php';
 include 'src/views/landing.php';
 include 'src/controllers/landing.php';
 
@@ -31,6 +31,20 @@ include 'src/controllers/editSheet.php';
 include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
+
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+
+// Create the logger
+$logger = new Logger('my_logger');
+// Now add some handlers
+$logger->pushHandler(new StreamHandler(__DIR__.'/app_data/my_app.log', Logger::DEBUG));
+$logger->pushHandler(new FirePHPHandler());
+
+// You can now use your logger
+$logger->info('My logger is now ready');
 
 // Debug use only
 ini_set('display_errors', 1);
@@ -45,6 +59,7 @@ if(isset($_REQUEST['c'])) {
     } else if($controller == "readSheet") {
         $readSheetController = new nighthawk\hw4\controllers\ReadSheetController();
         $readSheetController->handleRequest($_REQUEST);
+    }
 } else {
     $landingController = new nighthawk\hw4\controllers\LandingController();
     $landingController->handleRequest($_REQUEST);
