@@ -9,7 +9,7 @@ class LandingController extends Controller {
     public function handleRequest($req) { 
         $view = new \nighthawk\hw4\views\LandingView();
 
-        $view->render($array);
+        $view->render($req);
     }
 
 }

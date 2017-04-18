@@ -11,7 +11,7 @@ require_once('layouts/endLayout.php');
 
 class LandingView extends View {
 	public function render($data) {
-
+		
 		$h1 = new \nighthawk\hw4\elements\H1();
 		$link = new \nighthawk\hw4\elements\Link();
 		$form = new \nighthawk\hw4\helpers\Form();
@@ -20,10 +20,10 @@ class LandingView extends View {
 
 		$titleLink = array("index.php", "Web Sheets");
 
-		echo $beginLayout->render();
+		echo $beginLayout->render($data);
 		echo $h1->render($link->render($titleLink));
 		
-		echo $endLayout->render();
+		echo $endLayout->render($data);
 	}
 }
 
