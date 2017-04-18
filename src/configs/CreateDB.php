@@ -28,7 +28,7 @@
         $query = "CREATE TABLE SHEET (
                     sheet_id INT AUTO_INCREMENT,
                     sheet_name VARCHAR(255) NOT NULL,
-                    sheet_data INT DEFAULT 0,
+                    sheet_data VARCHAR(25500) NOT NULL,
                     PRIMARY KEY (sheet_id)
                 )";
         $result = mysqli_query($db, $query);
