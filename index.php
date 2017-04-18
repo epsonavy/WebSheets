@@ -10,7 +10,7 @@ To run this website, make sure modify database setting on src/configs/Config.php
 
 ****************************************************************************
 
-vendor folder has been added into .gitignore
+vendor folder and app_data folder has been added into .gitignore
 
 Please Run command line "composer install" to install all dependencies
 
@@ -32,6 +32,10 @@ include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
 
+/*
+
+An example to how to generate Monolog
+
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
@@ -44,6 +48,8 @@ $logger->pushHandler(new FirePHPHandler());
 
 // You can now use your logger
 $logger->info('My logger is now ready');
+
+*/
 
 // Web page debug use only
 ini_set('display_errors', 1);
