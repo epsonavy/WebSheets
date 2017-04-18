@@ -32,7 +32,6 @@ include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
 
-
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
@@ -46,7 +45,7 @@ $logger->pushHandler(new FirePHPHandler());
 // You can now use your logger
 $logger->info('My logger is now ready');
 
-// Debug use only
+// Web page debug use only
 ini_set('display_errors', 1);
 error_reporting(~0);
 

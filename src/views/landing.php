@@ -22,7 +22,7 @@ class LandingView extends View {
 
 		echo $beginLayout->render($data);
 		echo $h1->render($link->render($titleLink));
-		
+		echo $form->render($data);
 		echo $endLayout->render($data);
 	}
 }

@@ -7,8 +7,17 @@ require_once('helper.php');
 class Form extends Helper {
 	public function render($data) {
         ?>
-		<form method="get" action="index.php"><input type="hidden" name="c" value="sublist" /><input type="submit" value="Add" /></form>
+		<form method="get" action="index.php?c=landing&m=form" onsubmit="return validateForm()">
+        <input type="text" name="code" placeholder="New sheet name or code" />
+        <input type="submit" value="Go" />
+        </form>
         <?php
 	}
 }
 ?>
+
+<script>
+function validateForm() { 
+    return true;
+}
+</script>
