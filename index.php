@@ -1,10 +1,22 @@
 <?php
 
 include 'src/configs/Config.php';
-// No need to include 'src/configs/CreateDB.php';
+
 /*
+
+No need to include 'src/configs/CreateDB.php';
+
 To run this website, make sure modify database setting on src/configs/Config.php and then run command line at the that folder "php CreateDB.php" to initiate the database.
+
+****************************************************************************
+
+vendor folder has been added into .gitignore
+
+Please Run command line "composer install" to install all dependencies
+
 */
+
+require_once "vendor/autoload.php";
 
 // Included all MVC modules
 
