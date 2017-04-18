@@ -7,9 +7,7 @@ require_once('controller.php');
 class LandingController extends Controller {
 
     public function handleRequest($req) { 
-        $model = new \nighthawk\hw4\models\LandingModel();
         $view = new \nighthawk\hw4\views\LandingView();
-        
 
         $view->render($array);
     }
