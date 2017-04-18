@@ -2,9 +2,18 @@
 
 Lets users create and share spreadsheets on the web
 
+## To install composer
+
+command line "php composer.phar install"
+
+
 ## Please execute below command line to install all dependencies
 
 ```composer install ```
+
+or
+
+```composer update ```
 
 ## Database setup required
 
