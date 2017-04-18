@@ -4,7 +4,7 @@ namespace nighthawk\hw4\models;
 
 require_once('model.php');
 
-class ReadSheetModel extends Model {
+class EditSheetModel extends Model {
 
     public function getID_with_mode($key) {
         $query = "SELECT * From SHEET_CODES WHERE hash_code = ".$key;
@@ -33,6 +33,7 @@ class ReadSheetModel extends Model {
         }
         return $array;
     }
+
 }
 
 ?>
