@@ -12,7 +12,7 @@ use Monolog\Handler\FirePHPHandler;
 $logger = new Logger('my_logger');
 // Now add some handlers
 $logger->pushHandler(new StreamHandler('app_data/my_app.log', Logger::DEBUG));
-$logger->pushHandler(new FirePHPHandler());
+//$logger->pushHandler(new FirePHPHandler());
 
 // You can now use your logger
 $logger->info('Visited read sheet page');

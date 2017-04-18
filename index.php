@@ -34,7 +34,7 @@ include 'src/controllers/readSheet.php';
 
 /*
 
-An example to how to generate Monolog
+An example to how to generate Monolog:
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

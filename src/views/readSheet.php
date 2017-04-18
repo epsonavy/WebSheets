@@ -14,16 +14,14 @@ class ReadSheetView extends View {
 	public function render($data) {
 		if ($data) {
 			if ($data[1]) {
-				echo $data[1];
+				print_r($data[1]);
 			}
 		}
 		//dummy data for testing
 		$data[0] = "dummy title";
-		$data[1] = "[[\"Peter\",50],[\"Kevin\", 6]]";
+		$data[1] = "[[\"Peter\", \"50\"],[\"Kevin\", \"6\"]]";
 		$data[2] = "File";
 		$data[3] = "12345678";
-
-		print_r($data[1]);
 
 		$h1 = new \nighthawk\hw4\elements\H1();
 		$link = new \nighthawk\hw4\elements\Link();
