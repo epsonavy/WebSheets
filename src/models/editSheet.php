@@ -41,7 +41,7 @@ class EditSheetModel extends Model {
         $result = mysqli_query($this->mysql, $query);
         $array = array();
         while($row = mysqli_fetch_assoc($result)) {
-            array_push($array, $row['sheet_id']);
+            array_push($array, $row['sheet_data']);
         }
         if($result) {
             $result->free();

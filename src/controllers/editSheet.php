@@ -32,19 +32,23 @@ class EditSheetController extends Controller {
         $hasCode = $model->getDataByCode($name);
         $hasName = $model->getDataByName($name);
 
+        $md5_e = md5($name.'edit');
+        $md5_r = md5($name.'read');
+        $md5_f = md5($name.'file');
+
         array_push($newRes, $name);
 
         if ($hasCode) {
             echo "hashCode found!";
+
         } else if ($hasName) {
             echo "name found!";
+            array_push($newRes, $hasName[0]);
+
         } else {
             $blank = "[[\"\", \"\"],[\"\", \"\"]]";
             $id = $model->addSheet_getID($name, $blank);
-            $md5_e = md5($name.'edit');
-            $md5_r = md5($name.'read');
-            $md5_f = md5($name.'file');
-
+            
             $model->addHashCode($id[0], $md5_e, "edit");
             $model->addHashCode($id[0], $md5_r, "read");
             $model->addHashCode($id[0], $md5_f, "file");
