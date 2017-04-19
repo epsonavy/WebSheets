@@ -55,9 +55,20 @@ class EditSheetController extends Controller {
             array_push($newRes, $name);
 
             if ($hasCode) {
-                echo "hashCode found!";
+               //echo "hashCode found!";
                 $hashCode = $name;
-                print_r($hasCode);
+                $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+                $V_URL = 'http://' . $_SERVER['HTTP_HOST'].$uri_parts[0];
+
+                if ($hasCode[1] == 'edit') {
+                    //echo $V_URL.'?c=editSheet&code='.$hashCode;
+                    header('Location: http://www.google.com');
+                    exit;
+                } else if ($hashcode[1] == 'read') {
+                    echo $V_URL.'?c=readSheet&code='.$hashCode;
+                } else {
+                    echo $V_URL.'?c=file&code='.$hashCode;
+                }
 
             } else if ($hasName) {
                 echo $name." sheet found!";
