@@ -38,10 +38,11 @@
     $result = mysqli_query($db, $query);
     if(empty($result)) {
         $query = "CREATE TABLE SHEET_CODES (
+                    id INT AUTO_INCREMENT,
                     sheet_id INT references SHEET(sheet_id),
                     hash_code VARCHAR(255) NOT NULL,
                     code_type VARCHAR(255) NOT NULL,
-                    PRIMARY KEY (sheet_id)
+                    PRIMARY KEY (id)
                 )";
         $result = mysqli_query($db, $query);
     }

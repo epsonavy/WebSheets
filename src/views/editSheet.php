@@ -12,11 +12,9 @@ require_once('layouts/endLayout.php');
 
 class EditSheetView extends View {
 	public function render($data) {
-		if ($data) {
-			if ($data[1]) {
-				print_r($data[1]);
-			}
-		}
+		
+		print_r($data);
+
 		//dummy data for testing
 		$data[0] = "dummy title";
 		$data[1] = "[[\"Peter\", \"50\"],[\"Kevin\", \"6\"]]";

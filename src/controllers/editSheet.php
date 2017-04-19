@@ -23,11 +23,30 @@ class EditSheetController extends Controller {
 
         $model = new \nighthawk\hw4\models\EditSheetModel();
         $view = new \nighthawk\hw4\views\EditSheetView();
-        $array = Array();
+        $hasCode= $hasName = $newRes = Array();
 
         $model->initConnection();
+
+        $name = $_REQUEST['name'];
+        $hasCode = $model->getDataByCode($name);
+        $hasName = $model->getDataByName($name);
+
+        array_push($newRes, $name);
+        if ($hasCode) {
+            echo "hashCode found!";
+        } else if ($hasName) {
+            echo "name found!";
+        } else {
+            $blank = "[[\"\", \"\"],[\"\", \"\"]]";
+            $id = $model->addSheet_getID($name, $blank);
+            print_r($id);
+            //$model->addHashCode($id[0], md5($name.'read'), "read");
+            //$model->addHashCode($id[0], md5($name.'edit'), "edit");
+            //$model->addHashCode($id[0], md5($name.'file'), "file");
+            array_push($newRes, $blank);
+        }
         
-        $view->render($array);
+        $view->render($newRes);
     }
 
 }
