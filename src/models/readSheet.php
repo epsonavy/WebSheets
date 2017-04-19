@@ -6,8 +6,8 @@ require_once('model.php');
 
 class ReadSheetModel extends Model {
 
-    public function getID_with_mode($key) {
-        $query = "SELECT * From SHEET_CODES WHERE hash_code = ".$key;
+    public function getDataByCode($key) {
+        $query = "SELECT * From SHEET_CODES WHERE hash_code = '".$key."'";
         $result = mysqli_query($this->mysql, $query);
         $array = array();
         while($row = mysqli_fetch_assoc($result)) {
@@ -20,7 +20,7 @@ class ReadSheetModel extends Model {
         return $array;
     }
 
-    public function getData($id) {
+    public function getDataById($id) {
         $query = "SELECT * From SHEET WHERE sheet_id = ".$id;
         $result = mysqli_query($this->mysql, $query);
         $array = array();
