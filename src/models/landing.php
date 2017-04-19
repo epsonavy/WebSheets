@@ -19,7 +19,7 @@ class LandingModel extends Model {
         return $array;
     }
 
-    public function getID_with_mode($key) {
+    public function getDataByCode($key) {
         $query = "SELECT * From SHEET_CODES WHERE hash_code = ".$key;
         $result = mysqli_query($this->mysql, $query);
         $array = array();
