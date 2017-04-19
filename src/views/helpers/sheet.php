@@ -16,5 +16,3 @@ class Sheet extends Helper {
         <?php
 	}
 }
-?>
-

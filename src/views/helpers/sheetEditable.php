@@ -16,5 +16,3 @@ class SheetEditable extends Helper {
         <?php
 	}
 }
-?>
-

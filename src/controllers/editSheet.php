@@ -29,7 +29,7 @@ class EditSheetController extends Controller {
         $model->initConnection();
 
         if (isset($_REQUEST['code'])) {
-            echo "Analyzing hashcode :".$_REQUEST['code']." ...";
+            echo "Analyzing hashcode : ".$_REQUEST['code']." ...";
             $dataFromCode = $model->getDataByCode($_REQUEST['code']);
             $id = $dataFromCode[0];
             $dataFromId = $model->getDataById($id);
@@ -61,13 +61,17 @@ class EditSheetController extends Controller {
                 $V_URL = 'http://' . $_SERVER['HTTP_HOST'].$uri_parts[0];
 
                 if ($hasCode[1] == 'edit') {
-                    //echo $V_URL.'?c=editSheet&code='.$hashCode;
-                    header('Location: http://www.google.com');
+                    $link = $V_URL.'?c=editSheet&code='.$hashCode;
+                    header('Location:'.$link);
                     exit;
                 } else if ($hashcode[1] == 'read') {
-                    echo $V_URL.'?c=readSheet&code='.$hashCode;
+                    $link = $V_URL.'?c=readSheet&code='.$hashCode;
+                    header('Location:'.$link);
+                    exit;
                 } else {
-                    echo $V_URL.'?c=file&code='.$hashCode;
+                    $link = $V_URL.'?c=file&code='.$hashCode;
+                    header('Location:'.$link);
+                    exit;
                 }
 
             } else if ($hasName) {
