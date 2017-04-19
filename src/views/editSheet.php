@@ -13,9 +13,7 @@ require_once('layouts/endLayout.php');
 class EditSheetView extends View {
 	public function render($data) {
 		
-		print_r($data);
-
-		//dummy data for testing
+		/*/dummy data for testing
 		$data[0] = "dummy title";
 		$data[1] = "[[\"Peter\", \"50\"],[\"Kevin\", \"6\"]]";
 		$data[2] = "Edit";
@@ -23,7 +21,7 @@ class EditSheetView extends View {
 		$data[4] = "Read";
 		$data[5] = "12345678";
 		$data[6] = "File";
-		$data[7] = "12345678";
+		$data[7] = "12345678";*/
 
 		$h1 = new \nighthawk\hw4\elements\H1();
 		$link = new \nighthawk\hw4\elements\Link();

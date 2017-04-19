@@ -39,7 +39,6 @@ class EditSheetModel extends Model {
     public function getDataByName($name) {
         $query = "SELECT * From SHEET WHERE sheet_name = '".$name."'";
         $result = mysqli_query($this->mysql, $query);
-        echo $query;
         $array = array();
         while($row = mysqli_fetch_assoc($result)) {
             array_push($array, $row['sheet_id']);

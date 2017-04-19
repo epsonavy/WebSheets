@@ -24,6 +24,7 @@ class EditSheetController extends Controller {
         $model = new \nighthawk\hw4\models\EditSheetModel();
         $view = new \nighthawk\hw4\views\EditSheetView();
         $hasCode= $hasName = $newRes = Array();
+        $md5_e = $md5_r = $md5_f = "";
 
         $model->initConnection();
 
@@ -32,6 +33,7 @@ class EditSheetController extends Controller {
         $hasName = $model->getDataByName($name);
 
         array_push($newRes, $name);
+
         if ($hasCode) {
             echo "hashCode found!";
         } else if ($hasName) {
@@ -39,13 +41,24 @@ class EditSheetController extends Controller {
         } else {
             $blank = "[[\"\", \"\"],[\"\", \"\"]]";
             $id = $model->addSheet_getID($name, $blank);
-            print_r($id);
-            //$model->addHashCode($id[0], md5($name.'read'), "read");
-            //$model->addHashCode($id[0], md5($name.'edit'), "edit");
-            //$model->addHashCode($id[0], md5($name.'file'), "file");
+            $md5_e = md5($name.'edit');
+            $md5_r = md5($name.'read');
+            $md5_f = md5($name.'file');
+
+            $model->addHashCode($id[0], $md5_e, "edit");
+            $model->addHashCode($id[0], $md5_r, "read");
+            $model->addHashCode($id[0], $md5_f, "file");
             array_push($newRes, $blank);
+
         }
-        
+
+        array_push($newRes, "Edit");
+        array_push($newRes, $md5_e);
+        array_push($newRes, "Read");
+        array_push($newRes, $md5_r);
+        array_push($newRes, "File");
+        array_push($newRes, $md5_f);
+
         $view->render($newRes);
     }
 
