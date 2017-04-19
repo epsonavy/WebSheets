@@ -7,7 +7,8 @@ require_once('helper.php');
 class Form extends Helper {
 	public function render($data) {
         ?>
-		<form method="get" action="index.php?c=editSheet&m=form" name="myForm" onsubmit="return validateForm()">
+		<form method="get" action="index.php?c=editSheet&name=form" name="myForm" onsubmit="return validateForm()">
+        <input type="hidden" name="c" value="editSheet" />
         <input type="text" name="name" placeholder="New sheet name or code" />
         <input type="submit" value="Go" />
         </form>
