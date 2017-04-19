@@ -8,7 +8,7 @@ class Form extends Helper {
 	public function render($data) {
         ?>
 		<form method="get" action="index.php?c=landing&m=form" onsubmit="return validateForm()">
-        <input type="text" name="code" placeholder="New sheet name or code" />
+        <input type="text" name="name" placeholder="New sheet name or code" />
         <input type="submit" value="Go" />
         </form>
         <?php

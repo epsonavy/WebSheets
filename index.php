@@ -20,7 +20,7 @@ require_once "vendor/autoload.php";
 
 // Included all MVC modules
 
-//include 'src/models/landing.php';
+include 'src/models/landing.php';
 include 'src/views/landing.php';
 include 'src/controllers/landing.php';
 
