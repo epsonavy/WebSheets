@@ -32,6 +32,8 @@ include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
 
+include 'src/controllers/ApiController.php';
+
 /*
 
 An example to how to generate Monolog:
@@ -64,6 +66,9 @@ if(isset($_REQUEST['c'])) {
     } else if($controller == "readSheet") {
         $readSheetController = new nighthawk\hw4\controllers\ReadSheetController();
         $readSheetController->handleRequest($_REQUEST);
+    } else if($controller == "api") {
+        $apiController = new nighthawk\hw4\controllers\ApiController();
+        $apiController->handleRequest($_REQUEST);
     }
 } else {
     $landingController = new nighthawk\hw4\controllers\LandingController();
