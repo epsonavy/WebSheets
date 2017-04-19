@@ -28,34 +28,52 @@ class EditSheetController extends Controller {
 
         $model->initConnection();
 
-        $name = $_REQUEST['name'];
-        $hasCode = $model->getDataByCode($name);
-        $hasName = $model->getDataByName($name);
+        if (isset($_REQUEST['code'])) {
+            echo "Analyzing hashcode :".$_REQUEST['code']." ...";
+            $dataFromCode = $model->getDataByCode($_REQUEST['code']);
+            $id = $dataFromCode[0];
+            $dataFromId = $model->getDataById($id);
+            $name = $dataFromId[0];
 
-        $md5_e = md5($name.'edit');
-        $md5_r = md5($name.'read');
-        $md5_f = md5($name.'file');
+            $md5_e = substr(md5($name.'edit'), 0, 7);
+            $md5_r = substr(md5($name.'read'), 0, 7);
+            $md5_f = substr(md5($name.'file'), 0, 7);
 
-        array_push($newRes, $name);
-
-        if ($hasCode) {
-            echo "hashCode found!";
-
-        } else if ($hasName) {
-            echo "name found!";
-            array_push($newRes, $hasName[0]);
-
+            array_push($newRes, $name);
+            array_push($newRes, $dataFromId[1]);
         } else {
-            $blank = "[[\"\", \"\"],[\"\", \"\"]]";
-            $id = $model->addSheet_getID($name, $blank);
-            
-            $model->addHashCode($id[0], $md5_e, "edit");
-            $model->addHashCode($id[0], $md5_r, "read");
-            $model->addHashCode($id[0], $md5_f, "file");
-            array_push($newRes, $blank);
 
+            $name = $_REQUEST['name'];
+            $hasCode = $model->getDataByCode($name);
+            $hasName = $model->getDataByName($name);
+
+            // substr(string,start,length)
+            $md5_e = substr(md5($name.'edit'), 0, 7);
+            $md5_r = substr(md5($name.'read'), 0, 7);
+            $md5_f = substr(md5($name.'file'), 0, 7);
+
+            array_push($newRes, $name);
+
+            if ($hasCode) {
+                echo "hashCode found!";
+                $hashCode = $name;
+                print_r($hasCode);
+
+            } else if ($hasName) {
+                echo $name." sheet found!";
+                array_push($newRes, $hasName[0]);
+
+            } else {
+                $blank = "[[\"\", \"\"],[\"\", \"\"]]";
+                $id = $model->addSheet_getID($name, $blank);
+                
+                $model->addHashCode($id[0], $md5_e, "edit");
+                $model->addHashCode($id[0], $md5_r, "read");
+                $model->addHashCode($id[0], $md5_f, "file");
+                array_push($newRes, $blank);
+
+            }
         }
-
         array_push($newRes, "Edit");
         array_push($newRes, $md5_e);
         array_push($newRes, "Read");
