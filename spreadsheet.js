@@ -267,8 +267,8 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                 }
             }
             cell_elt = document.getElementById(self.cell_id + "_" + row + "_" + column);
-            cell_elt.style.backgroundColor = "green";
-            var new_value = JSON.stringify(data_elt);
+            cell_elt.style.backgroundColor = "yellow";
+            var new_value = cell_elt.innerHTML;
             if (new_value != null) {
                 data[row][column] = new_value;
                 data_elt = document.getElementById(self.data_id);
@@ -322,5 +322,6 @@ function Spreadsheet(spreadsheet_id, supplied_data)
     }
     if (this.mode == 'write') {
         container.addEventListener("click", self.updateCell, true);
+        container.addEventListener("keyup", self.updateCell, true);
     }
 }
