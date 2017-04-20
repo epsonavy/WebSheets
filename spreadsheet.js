@@ -100,15 +100,18 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         item = self.evaluateCell(item.substring(1), 0)[1];
                     }
                 }
-                table += "<td>" + item + "</td>";
+                // <input type='text' onfocus='checkFilled(this);' value='" + item + "' />
+                if (self.mode == 'write') {
+                    table += "<td contenteditable = 'true'>" + item + "</td>"
+                } else {
+                    table += "<td>" + item + "</td>";
+                }
             }
             table += "</tr>";
         }
         table += "</table></div>";
         container.innerHTML = table;
     }
-
-    
     /**
      * Calculates the value of a cell expression in a spreadsheet. Currently,
      * a cell expression is either an integer literal, a non-scientific notation
@@ -254,8 +257,9 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var length = data.length;
         var width = data[0].length;
         if (row >= 0 && column >= 0) {
-            var new_value = prompt(self.letterRepresentation(column) +
-                (row + 1), data[row][column]);
+            // Adding new code here <========================================
+            var new_value = JSON.stringify(event.target);
+            event.target.className = "red";
             if (new_value != null) {
                 data[row][column] = new_value;
                 data_elt = document.getElementById(self.data_id);

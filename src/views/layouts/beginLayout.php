@@ -14,6 +14,7 @@ class BeginLayout extends Layout {
 	        <meta charset="UTF-8">
 	        <title>Web Sheets</title>
 	        <script type="text/javascript" src="spreadsheet.js"></script>
+	        <link rel="stylesheet" type="text/css" href="src/styles/style.css">
 	    </head>
 	    <body>
 	    <?php
