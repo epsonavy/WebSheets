@@ -52,6 +52,8 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         'data_id' : spreadsheet_id + "-data",
         'data_name' : 'page',
         'table_style' : 'overflow:auto;height:6in;',
+        'table_id' : 'myTable',
+        'cell_id' : 'myCell',
     };
     for (var property_key in property_defaults) {
         if (typeof properties[property_key] !== 'undefined') {
@@ -79,7 +81,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             add_button = "<button>+</button>";
             pre_delete_button = "<button>-</button>";
         }
-        table += "<table border='1' ><tr><th></th>";
+        table += "<table id='" + self.table_id+ "' border='1' ><tr><th></th>";
         for (var i = 0; i < width; i++) {
             table += "<th style='min-width:1in;text-align:right;'>" +
                 delete_button + self.letterRepresentation(i) + add_button +
@@ -102,7 +104,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                 }
                 // <input type='text' onfocus='checkFilled(this);' value='" + item + "' />
                 if (self.mode == 'write') {
-                    table += "<td contenteditable = 'true'>" + item + "</td>"
+                    table += "<td id='" + self.cell_id + "_" + i + "_" + j + "' contenteditable = 'true'>" + item + "</td>"
                 } else {
                     table += "<td>" + item + "</td>";
                 }
@@ -258,8 +260,15 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var width = data[0].length;
         if (row >= 0 && column >= 0) {
             // Adding new code here <========================================
-            var new_value = JSON.stringify(event.target);
-            event.target.className = "red";
+            for (var i = 0; i < length; i++) {
+                for (var j = 0; j < width; j++) {
+                    cell_elt = document.getElementById(self.cell_id + "_" + i + "_" + j);
+                    cell_elt.style.backgroundColor = "transparent";
+                }
+            }
+            cell_elt = document.getElementById(self.cell_id + "_" + row + "_" + column);
+            cell_elt.style.backgroundColor = "green";
+            var new_value = JSON.stringify(data_elt);
             if (new_value != null) {
                 data[row][column] = new_value;
                 data_elt = document.getElementById(self.data_id);
