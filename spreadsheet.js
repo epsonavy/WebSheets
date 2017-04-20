@@ -103,7 +103,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         item = self.evaluateCell(item.substring(1), 0)[1];
                     }
                 }
-                // <input type='text' onfocus='checkFilled(this);' value='" + item + "' />
+                // Adding code here <========================================
                 if (self.mode == 'write') {
                     table += "<td id='" + self.cell_id + "_" + i + "_" + j + "' contenteditable = 'true'>" + item + "</td>"
                 } else {
@@ -278,6 +278,21 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     data_elt = document.getElementById(self.data_id);
                     data_elt.value = JSON.stringify(data);
                     event.target.innerHTML = new_value;
+
+                    var json = data_elt.value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'src/controllers/ApiController.php', true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    //xhr.setRequestHeader('Content-Type', 'application/json;');
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            alert(xhr.responseText);
+                        }
+                        else if (xhr.status !== 200) {
+                            alert('Request failed.  Returned status of ' + xhr.status);
+                        }
+                    };
+                    xhr.send(encodeURI('data=' + JSON.stringify(json)));
                 }
             }, 500);
         } else if (type == 'add' && row == -1 && column >= 0) {

@@ -2,18 +2,8 @@
 
 namespace nighthawk\hw4\controllers;
 
-require_once('controller.php');
-
-class ApiController extends Controller {
-
-    public function handleRequest($req) { 
-        
-        /*
-        $view = new \nighthawk\hw4\views\LandingView();
-        $view->render($req);
-        */
-    }
-
-}
+echo "in ApiController:";
+//header('Content-Type: application/json;');
+echo ($_POST['data']);
 
 ?>
