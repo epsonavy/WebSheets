@@ -2,19 +2,14 @@
 
 namespace nighthawk\hw4\controllers;
 
-//echo ($_POST['name']);
-echo ($_POST['data']);
+$model = new \nighthawk\hw4\models\ApiModel();
+$model->initConnection();
 
-require_once('controller.php');
+if (isset($_POST['name'])) {
+    echo ($_POST['data']);
+}
 
-class ApiController extends Controller {
-
-    public function handleRequest($req) { 
-        
-        $model = new \nighthawk\hw4\models\ApiModel();
-        $model->initConnection();
-        
-    }
+if (isset($_POST['code'])) {
 
 }
 

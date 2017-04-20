@@ -286,7 +286,9 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     event.target.innerHTML = new_value;
 
                     var json = data_elt.value;
-                    var arg =  getUrlParameter('name');
+                    var sheet_name = sheet_code = "";
+                    sheet_name = getUrlParameter('name');
+                    sheet_code = getUrlParameter('code');
                     var xhr = new XMLHttpRequest();
                     xhr.open('POST', 'src/controllers/ApiController.php', true);
                     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -298,7 +300,11 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                             alert('Request failed.  Returned status of ' + xhr.status);
                         }
                     };
-                    xhr.send(encodeURI('name='+ self.data_name +'&data=' + JSON.stringify(json)));
+                    if (sheet_name) {
+                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + JSON.stringify(json))); 
+                    } else {
+                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + JSON.stringify(json))); 
+                    }
                 }
             }, 500);
         } else if (type == 'add' && row == -1 && column >= 0) {

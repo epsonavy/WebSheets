@@ -32,6 +32,7 @@ include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
 
+include 'src/models/api.php';
 include 'src/controllers/ApiController.php';
 
 /*
