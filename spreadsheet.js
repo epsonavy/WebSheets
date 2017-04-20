@@ -274,16 +274,22 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             timeout = setTimeout(function(){
                 var new_value = cell_elt.innerHTML;
                 if (new_value != null) {
+                    function getUrlParameter(param){
+                        var pattern = new RegExp('[?&]'+param+'((=([^&]*))|(?=(&|$)))','i');
+                        var m = window.location.search.match(pattern);
+                        return m && ( typeof(m[3])==='undefined' ? '' : m[3] );
+                    }
+
                     data[row][column] = new_value;
                     data_elt = document.getElementById(self.data_id);
                     data_elt.value = JSON.stringify(data);
                     event.target.innerHTML = new_value;
 
                     var json = data_elt.value;
+                    var arg =  getUrlParameter('name');
                     var xhr = new XMLHttpRequest();
                     xhr.open('POST', 'src/controllers/ApiController.php', true);
                     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    //xhr.setRequestHeader('Content-Type', 'application/json;');
                     xhr.onload = function() {
                         if (xhr.status === 200) {
                             alert(xhr.responseText);
@@ -292,7 +298,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                             alert('Request failed.  Returned status of ' + xhr.status);
                         }
                     };
-                    xhr.send(encodeURI('data=' + JSON.stringify(json)));
+                    xhr.send(encodeURI('name='+ self.data_name +'&data=' + JSON.stringify(json)));
                 }
             }, 500);
         } else if (type == 'add' && row == -1 && column >= 0) {
