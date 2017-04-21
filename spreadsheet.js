@@ -290,7 +290,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     sheet_name = getUrlParameter('name');
                     sheet_code = getUrlParameter('code');
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'src/controllers/ApiController.php', true);
+                    xhr.open('POST', 'index.php?c=api&', true);
                     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                     xhr.onload = function() {
                         if (xhr.status === 200) {
@@ -301,9 +301,9 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         }
                     };
                     if (sheet_name) {
-                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + JSON.stringify(json))); 
+                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
                     } else {
-                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + JSON.stringify(json))); 
+                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
                     }
                 }
             }, 500);
