@@ -18,9 +18,6 @@ class ApiController extends Controller {
         }
 
         if (isset($_POST['code'])) {
-            echo ($_POST['code']);
-            echo "====>";
-            echo ($_POST['data']);
             $code = $_POST['code'];
             $data = substr($_POST['data'], 0, strlen($_POST['data']));
             $model->updateSheetByCode($code, $data);

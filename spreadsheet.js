@@ -76,7 +76,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var delete_button = "";
         var pre_delete_button = "";
         if (self.mode == 'write') {
-            table += "<input id='" + self.data_id+ "' type='hidden' " +
+            table += "<div id='status'></div><input id='" + self.data_id+ "' type='hidden' " +
                 "name='" + self.data_name + "' value='" + JSON.stringify(
                 data)+ "' />";
             add_button = "<button>+</button>";
@@ -259,6 +259,12 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var column = target.cellIndex - 1;
         var length = data.length;
         var width = data[0].length;
+        var json = "";
+        function getUrlParameter(param){
+            var pattern = new RegExp('[?&]'+param+'((=([^&]*))|(?=(&|$)))','i');
+            var m = window.location.search.match(pattern);
+            return m && ( typeof(m[3])==='undefined' ? '' : m[3] );
+        }
         if (row >= 0 && column >= 0) {
             // Adding new code here <========================================
             for (var i = 0; i < length; i++) {
@@ -270,43 +276,14 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             cell_elt = document.getElementById(self.cell_id + "_" + row + "_" + column);
             cell_elt.style.backgroundColor = "yellow";
 
-            clearTimeout(timeout);
-            timeout = setTimeout(function(){
-                var new_value = cell_elt.innerHTML;
-                if (new_value != null) {
-                    function getUrlParameter(param){
-                        var pattern = new RegExp('[?&]'+param+'((=([^&]*))|(?=(&|$)))','i');
-                        var m = window.location.search.match(pattern);
-                        return m && ( typeof(m[3])==='undefined' ? '' : m[3] );
-                    }
-
-                    data[row][column] = new_value;
-                    data_elt = document.getElementById(self.data_id);
-                    data_elt.value = JSON.stringify(data);
-                    event.target.innerHTML = new_value;
-
-                    var json = data_elt.value;
-                    var sheet_name = sheet_code = "";
-                    sheet_name = getUrlParameter('name');
-                    sheet_code = getUrlParameter('code');
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'index.php?c=api&', true);
-                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            alert(xhr.responseText);
-                        }
-                        else if (xhr.status !== 200) {
-                            alert('Request failed.  Returned status of ' + xhr.status);
-                        }
-                    };
-                    if (sheet_name) {
-                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
-                    } else {
-                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
-                    }
-                }
-            }, 500);
+            var new_value = cell_elt.innerHTML;
+            if (new_value != null) {
+                data[row][column] = new_value;
+                data_elt = document.getElementById(self.data_id);
+                data_elt.value = JSON.stringify(data);
+                event.target.innerHTML = new_value;
+                json = data_elt.value;
+            }
         } else if (type == 'add' && row == -1 && column >= 0) {
             for (var i = 0; i < length; i++) {
                 for (var j = width; j > column + 1; j--) {
@@ -316,6 +293,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             }
             data_elt = document.getElementById(self.data_id);
             data_elt.value = JSON.stringify(data);
+            json = data_elt.value;
             self.draw();
         } else if (type == 'add' && row >= 0 && column == -1) {
             data[length] = [];
@@ -329,6 +307,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             }
             data_elt = document.getElementById(self.data_id);
             data_elt.value = JSON.stringify(data);
+            json = data_elt.value;
             self.draw();
         } else if (type == 'delete' && row == -1 && column >= 0) {
             for (var i = 0; i < length; i++) {
@@ -339,6 +318,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             }
             data_elt = document.getElementById(self.data_id);
             data_elt.value = JSON.stringify(data);
+            json = data_elt.value;
             self.draw();
         } else if (type == 'delete' && row >= 0 && column == -1) {
             for (var i = row; i < length - 1; i++) {
@@ -347,8 +327,32 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             data.pop();
             data_elt = document.getElementById(self.data_id);
             data_elt.value = JSON.stringify(data);
+            json = data_elt.value;
             self.draw();
         }
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            var sheet_name = getUrlParameter('name');
+            var sheet_code = getUrlParameter('code');
+            status = document.getElementById("status");
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'index.php?c=api&', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    //alert(xhr.responseText);
+                    status.innerHTML = "<p>Data Saved...</p>";
+                }
+                else if (xhr.status !== 200) {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            if (sheet_name) {
+                xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
+            } else {
+                xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
+            }
+        }, 500);
         event.stopPropagation();
         event.preventDefault();
     }
