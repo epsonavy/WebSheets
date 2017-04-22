@@ -32,6 +32,9 @@ include 'src/models/readSheet.php';
 include 'src/views/readSheet.php';
 include 'src/controllers/readSheet.php';
 
+include 'src/models/file.php';
+include 'src/controllers/FileController.php';
+
 include 'src/models/api.php';
 include 'src/controllers/ApiController.php';
 
@@ -58,18 +61,21 @@ $logger->info('My logger is now ready');
 ini_set('display_errors', 1);
 error_reporting(~0);
 
-if(isset($_REQUEST['c'])) {
+if (isset($_REQUEST['c'])) {
     $controller = $_REQUEST['c'];
     
-    if($controller == "editSheet") {
+    if ($controller == "editSheet") {
         $editSheetController = new nighthawk\hw4\controllers\EditSheetController();
         $editSheetController->handleRequest($_REQUEST);
-    } else if($controller == "readSheet") {
+    } else if ($controller == "readSheet") {
         $readSheetController = new nighthawk\hw4\controllers\ReadSheetController();
         $readSheetController->handleRequest($_REQUEST);
-    } else if($controller == "api") {
+    } else if ($controller == "api") {
         $apiController = new nighthawk\hw4\controllers\ApiController();
         $apiController->handleRequest($_REQUEST);
+    } else if ($controller == "file") {
+        $fileController = new nighthawk\hw4\controllers\FileController();
+        $fileController->handleRequest($_REQUEST);
     }
 } else {
     $landingController = new nighthawk\hw4\controllers\LandingController();
