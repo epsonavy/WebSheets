@@ -1,0 +1,3 @@
+title: make connection to database
+assigned: Pei Liu
+description: create database base on requirement and connect frontend to database

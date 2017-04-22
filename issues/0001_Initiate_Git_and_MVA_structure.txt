@@ -1,0 +1,4 @@
+title: Initiate git and create MVA structure
+assigned: Pei Liu
+description: Design MVA to meet the requirements, and create folders and files based the design
+ 
