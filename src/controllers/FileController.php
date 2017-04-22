@@ -13,15 +13,16 @@ class FileController extends Controller {
         $newRes = Array();
         $model->initConnection();
 
-        if (isset($_POST['code'])) {
-            $code = $_POST['code'];
+        if (isset($_REQUEST['code'])) {
+            $code = $_REQUEST['code'];
             $dataFromCode = $model->getDataByCode($_REQUEST['code']);
             $id = $dataFromCode[0];
             $dataFromId = $model->getDataById($id);
+            array_push($newRes, $dataFromId[0]);
             array_push($newRes, $dataFromId[1]);
         }
 
-        //$view->render($newRes);
+        $view->render($newRes);
     }
 }
 
