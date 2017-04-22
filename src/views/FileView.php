@@ -18,28 +18,32 @@ class FileView extends View {
 
 		$name = $data[0];
 		$sheetData = $data[1];
+
+		echo $sheet->render($name);
+
 		$sheetData = substr($sheetData, 1, strlen($sheetData) - 2);
 		$rows = explode("],[", $sheetData);
 		$rows_length = count($rows);
 		$cells = array();
 		for ($i = 0; $i < $rows_length; $i++) {
+			echo "<row>";
 			array_push($cells, explode(",", $rows[$i]));
+			foreach ($cells as $key => $data) {
+				foreach ($data as $key => $value) {
+					if (substr($value, 0, 1) == "[") {
+						$value = substr($value, 1, strlen($value));
+					}
+					if (substr($value, strlen($value) - 1, strlen($value)) == "]") {
+						$value = substr($value, 0, strlen($value) - 1);
+					}
+					$value = trim($value, "\"");
+
+					echo $dataTag->render($value);
+				}		
+			}
+			echo "</row>";
 		}
-		
-		echo $sheet->render($name);
-		/*
-		$h1 = new \nighthawk\hw4\elements\H1();
-		$link = new \nighthawk\hw4\elements\Link();
-		$form = new \nighthawk\hw4\helpers\Form();
-		$beginLayout = new \nighthawk\hw4\layouts\BeginLayout();
-		$endLayout = new \nighthawk\hw4\layouts\EndLayout();
-
-		$titleLink = array("index.php", "Web Sheets");
-
-		echo $beginLayout->render($data);
-		echo $h1->render($link->render($titleLink));
-		echo $form->render($data);
-		echo $endLayout->render($data);*/
+		echo $sheetEnd->render(null);
 	}
 }
 
