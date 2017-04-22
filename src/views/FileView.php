@@ -19,14 +19,14 @@ class FileView extends View {
 		$name = $data[0];
 		$sheetData = $data[1];
 
-		echo $sheet->render($name);
-
+		$xml = "";
+		$xml = $xml.$sheet->render($name);
 		$sheetData = substr($sheetData, 1, strlen($sheetData) - 2);
 		$rows = explode("],[", $sheetData);
 		$rows_length = count($rows);
 		$cells = array();
 		for ($i = 0; $i < $rows_length; $i++) {
-			echo "<row>";
+			$xml = $xml."<row>";
 			array_push($cells, explode(",", $rows[$i]));
 			foreach ($cells as $key => $data) {
 				foreach ($data as $key => $value) {
@@ -37,12 +37,14 @@ class FileView extends View {
 						$value = substr($value, 0, strlen($value) - 1);
 					}
 					$value = trim($value, "\"");
-					echo $dataTag->render($value);
+					$xml = $xml.$dataTag->render($value);
 				}		
 			}
-			echo "</row>";
+			$xml = $xml."</row>";
 		}
-		echo $sheetEnd->render(null);
+		$xml = $xml.$sheetEnd->render(null);
+		file_put_contents('sheet.xml',$xml);
+		header('Location: sheet.xml');
 	}
 }
 
