@@ -37,7 +37,6 @@ class FileView extends View {
 						$value = substr($value, 0, strlen($value) - 1);
 					}
 					$value = trim($value, "\"");
-
 					echo $dataTag->render($value);
 				}		
 			}
