@@ -19,6 +19,20 @@ class FileModel extends Model {
         }
         return $array;
     }
+
+    public function getDataById($id) {
+        $query = "SELECT * From SHEET WHERE sheet_id = ".$id;
+        $result = mysqli_query($this->mysql, $query);
+        $array = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            array_push($array, $row['sheet_name']);
+            array_push($array, $row['sheet_data']);
+        }
+        if($result) {
+            $result->free();
+        }
+        return $array;
+    }
 }
 
 ?>

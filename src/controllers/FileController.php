@@ -15,7 +15,10 @@ class FileController extends Controller {
 
         if (isset($_POST['code'])) {
             $code = $_POST['code'];
-            $model->getDataByCode($code);
+            $dataFromCode = $model->getDataByCode($_REQUEST['code']);
+            $id = $dataFromCode[0];
+            $dataFromId = $model->getDataById($id);
+            array_push($newRes, $dataFromId[1]);
         }
 
         //$view->render($newRes);
