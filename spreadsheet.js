@@ -286,26 +286,24 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         data_elt.value = JSON.stringify(data);
                         event.target.innerHTML = new_value;
                         json = data_elt.value;
-                        alert(json);//==>>>>>>>>>>>>>>>>>>
                     }
                     var sheet_name = getUrlParameter('name');
                     var sheet_code = getUrlParameter('code');
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'index.php?c=api&', true);
-                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
+                    xhr.open('POST', 'index.php?c=api', true);
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.onreadystatechange = function () { 
+                        if (xhr.status == 200) {
                             //alert(xhr.responseText);
-                        }
-                        else if (xhr.status !== 200) {
+                        } else if (xhr.status !== 200) {
                             alert('Request failed.  Returned status of ' + xhr.status);
                         }
                     };
-                    if (sheet_name) {
-                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
-                    } else {
-                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
-                    }
+                    var json_data = "{\"name\" : \"" + sheet_name 
+                        + "\", \"code\" : \"" + sheet_code 
+                        + "\", \"table\" : " + json + "}";
+                    //console.log(json_data);
+                    xhr.send(json_data);
                     e.stopPropagation();
                     e.preventDefault();
                 }

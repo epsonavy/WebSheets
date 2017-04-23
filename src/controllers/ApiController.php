@@ -8,20 +8,26 @@ class ApiController extends Controller {
 
     public function handleRequest($req) { 
 
+        header("Content-Type: application/json");
+        $obj = json_decode(stripslashes(file_get_contents("php://input")));
+        $name = $code = $data = "";
+
+        if($obj->name != "null") {
+            $name = $obj->name;
+        }
+        if($obj->code != "null") {
+            $code = $obj->code;
+        }
+        if($obj->table) {
+            $data = json_encode($obj->table);
+        }
         $model = new \nighthawk\hw4\models\ApiModel();
         $model->initConnection();
 
-        if (isset($_POST['name'])) {
-            $name = $_POST['name'];
-            $data = $_POST['data'];
-            //$data = substr($_POST['data'], 0, strlen($_POST['data']));
+        if ($name != "") {
             $model->updateSheetByName($name, $data);
-        }
-
-        if (isset($_POST['code'])) {
-            $code = $_POST['code'];
-            $data = $_POST['data'];
-            //$data = substr($_POST['data'], 0, strlen($_POST['data']));
+        } 
+        if ($code != "") {
             $model->updateSheetByCode($code, $data);
         }
     }
