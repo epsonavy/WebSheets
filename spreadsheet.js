@@ -277,36 +277,48 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             cell_elt = document.getElementById(self.cell_id + "_" + row + "_" + column);
             cell_elt.style.backgroundColor = "yellow";
 
-            flag = false;
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                var new_value = cell_elt.innerHTML;
-                if (new_value != null) {
-                    data[row][column] = new_value;
-                    data_elt = document.getElementById(self.data_id);
-                    data_elt.value = JSON.stringify(data);
-                    event.target.innerHTML = new_value;
-                    json = data_elt.value;
-                }
-                var sheet_name = getUrlParameter('name');
-                var sheet_code = getUrlParameter('code');
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'index.php?c=api&', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        //alert(xhr.responseText);
+            var new_value = cell_elt.innerHTML;
+            if (new_value != null) {
+                data[row][column] = new_value;
+                data_elt = document.getElementById(self.data_id);
+                data_elt.value = JSON.stringify(data);
+                event.target.innerHTML = new_value;
+                json = data_elt.value;
+            }
+            cell_elt.addEventListener("keydown", function(e) {
+                var key = e.which || e.keyCode;
+                if (key === 13) {
+                    e.preventDefault();
+                    flag = false;
+
+                    var new_value = cell_elt.innerHTML;
+                    if (new_value != null) {
+                        data[row][column] = new_value;
+                        data_elt = document.getElementById(self.data_id);
+                        data_elt.value = JSON.stringify(data);
+                        event.target.innerHTML = new_value;
+                        json = data_elt.value;
                     }
-                    else if (xhr.status !== 200) {
-                        alert('Request failed.  Returned status of ' + xhr.status);
+                    var sheet_name = getUrlParameter('name');
+                    var sheet_code = getUrlParameter('code');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'index.php?c=api&', true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            //alert(xhr.responseText);
+                        }
+                        else if (xhr.status !== 200) {
+                            alert('Request failed.  Returned status of ' + xhr.status);
+                        }
+                    };
+                    if (sheet_name) {
+                        xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
+                    } else {
+                        xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
                     }
-                };
-                if (sheet_name) {
-                    xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
-                } else {
-                    xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
                 }
-            }, 500);
+            })
         } else if (type == 'add' && row == -1 && column >= 0) {
             for (var i = 0; i < length; i++) {
                 for (var j = width; j > column + 1; j--) {
@@ -379,6 +391,6 @@ function Spreadsheet(spreadsheet_id, supplied_data)
     }
     if (this.mode == 'write') {
         container.addEventListener("click", self.updateCell, true);
-        container.addEventListener("keyup", self.updateCell, true);
+        //container.addEventListener("keyup", self.updateCell, true);
     }
 }
