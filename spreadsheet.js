@@ -302,12 +302,10 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     var json_data = "{\"name\" : \"" + sheet_name 
                         + "\", \"code\" : \"" + sheet_code 
                         + "\", \"table\" : " + json + "}";
-                    //console.log(json_data);
                     xhr.send(json_data);
                     e.stopPropagation();
                     e.preventDefault();
                 }
-                //e.currentTarget.removeEventListener(e.type, handler);
             });
             cell_elt.addEventListener("blur", function handler(e) {
                 var new_value = cell_elt.innerHTML;
@@ -321,21 +319,19 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                 var sheet_name = getUrlParameter('name');
                 var sheet_code = getUrlParameter('code');
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'index.php?c=api&', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
+                xhr.open('POST', 'index.php?c=api', true);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.onreadystatechange = function () { 
+                    if (xhr.status == 200) {
                         //alert(xhr.responseText);
-                    }
-                    else if (xhr.status !== 200) {
+                    } else if (xhr.status !== 200) {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
                 };
-                if (sheet_name) {
-                    xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
-                } else {
-                    xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
-                }
+                var json_data = "{\"name\" : \"" + sheet_name 
+                    + "\", \"code\" : \"" + sheet_code 
+                    + "\", \"table\" : " + json + "}";
+                xhr.send(json_data);
                 e.currentTarget.removeEventListener(e.type, handler);
             });
         } else if (type == 'add' && row == -1 && column >= 0) {
@@ -393,21 +389,19 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             var sheet_name = getUrlParameter('name');
             var sheet_code = getUrlParameter('code');
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'index.php?c=api&', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
+            xhr.open('POST', 'index.php?c=api', true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.onreadystatechange = function () { 
+                if (xhr.status == 200) {
                     //alert(xhr.responseText);
-                }
-                else if (xhr.status !== 200) {
+                } else if (xhr.status !== 200) {
                     alert('Request failed.  Returned status of ' + xhr.status);
                 }
             };
-            if (sheet_name) {
-                xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
-            } else {
-                xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
-            }
+            var json_data = "{\"name\" : \"" + sheet_name 
+                + "\", \"code\" : \"" + sheet_code 
+                + "\", \"table\" : " + json + "}";
+            xhr.send(json_data);
         }
         event.stopPropagation();
         event.preventDefault();
