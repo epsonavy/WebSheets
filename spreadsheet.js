@@ -260,8 +260,8 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var length = data.length;
         var width = data[0].length;
         var json = "";
-        var flag = true;
-        function getUrlParameter(param){
+        var flag = false;
+        function getUrlParameter(param) {
             var pattern = new RegExp('[?&]'+param+'((=([^&]*))|(?=(&|$)))','i');
             var m = window.location.search.match(pattern);
             return m && ( typeof(m[3])==='undefined' ? '' : m[3] );
@@ -277,19 +277,11 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             cell_elt = document.getElementById(self.cell_id + "_" + row + "_" + column);
             cell_elt.style.backgroundColor = "yellow";
 
-            var new_value = cell_elt.innerHTML;
-            if (new_value != null) {
-                data[row][column] = new_value;
-                data_elt = document.getElementById(self.data_id);
-                data_elt.value = JSON.stringify(data);
-                event.target.innerHTML = new_value;
-                json = data_elt.value;
-            }
             cell_elt.addEventListener("keydown", function(e) {
                 var key = e.which || e.keyCode;
                 if (key === 13) {
+                    e.stopPropagation();
                     e.preventDefault();
-                    flag = false;
 
                     var new_value = cell_elt.innerHTML;
                     if (new_value != null) {
@@ -318,8 +310,39 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
                     }
                 }
-            })
+                e.currentTarget.removeEventListener(e.type, handler);
+            });
+            cell_elt.addEventListener("blur", function handler(e) {
+                var new_value = cell_elt.innerHTML;
+                if (new_value != null) {
+                    data[row][column] = new_value;
+                    data_elt = document.getElementById(self.data_id);
+                    data_elt.value = JSON.stringify(data);
+                    event.target.innerHTML = new_value;
+                    json = data_elt.value;
+                }
+                var sheet_name = getUrlParameter('name');
+                var sheet_code = getUrlParameter('code');
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'index.php?c=api&', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        //alert(xhr.responseText);
+                    }
+                    else if (xhr.status !== 200) {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                if (sheet_name) {
+                    xhr.send(encodeURI('name='+ sheet_name +'&data=' + json)); 
+                } else {
+                    xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
+                }
+                e.currentTarget.removeEventListener(e.type, handler);
+            });
         } else if (type == 'add' && row == -1 && column >= 0) {
+            flag = true;
             for (var i = 0; i < length; i++) {
                 for (var j = width; j > column + 1; j--) {
                     data[i][j] = data[i][j-1];
@@ -331,6 +354,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             json = data_elt.value;
             self.draw();
         } else if (type == 'add' && row >= 0 && column == -1) {
+            flag = true;
             data[length] = [];
             for (var i = length; i > row + 1; i--) {
                 for (var j = 0; j < width; j++) {
@@ -345,6 +369,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             json = data_elt.value;
             self.draw();
         } else if (type == 'delete' && row == -1 && column >= 0) {
+            flag = true;
             for (var i = 0; i < length; i++) {
                 for (var j = column ; j < width - 1; j++) {
                     data[i][j] = data[i][j + 1];
@@ -356,6 +381,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             json = data_elt.value;
             self.draw();
         } else if (type == 'delete' && row >= 0 && column == -1) {
+            flag = true;
             for (var i = row; i < length - 1; i++) {
                     data[i] = data[i + 1];
             }
@@ -391,6 +417,5 @@ function Spreadsheet(spreadsheet_id, supplied_data)
     }
     if (this.mode == 'write') {
         container.addEventListener("click", self.updateCell, true);
-        //container.addEventListener("keyup", self.updateCell, true);
     }
 }
