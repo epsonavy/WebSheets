@@ -13,13 +13,15 @@ class ApiController extends Controller {
 
         if (isset($_POST['name'])) {
             $name = $_POST['name'];
-            $data = substr($_POST['data'], 0, strlen($_POST['data']));
+            $data = $_POST['data'];
+            //$data = substr($_POST['data'], 0, strlen($_POST['data']));
             $model->updateSheetByName($name, $data);
         }
 
         if (isset($_POST['code'])) {
             $code = $_POST['code'];
-            $data = substr($_POST['data'], 0, strlen($_POST['data']));
+            $data = $_POST['data'];
+            //$data = substr($_POST['data'], 0, strlen($_POST['data']));
             $model->updateSheetByCode($code, $data);
         }
     }

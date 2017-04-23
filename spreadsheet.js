@@ -76,7 +76,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var delete_button = "";
         var pre_delete_button = "";
         if (self.mode == 'write') {
-            table += "<div id='myStatus'></div><input id='" + self.data_id+ "' type='hidden' " +
+            table += "<div id='myStatus' style='color: red;'>You may use 'Enter' key to save data</div><input id='" + self.data_id+ "' type='hidden' " +
                 "name='" + self.data_name + "' value='" + JSON.stringify(
                 data)+ "' />";
             add_button = "<button>+</button>";
@@ -278,11 +278,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
             cell_elt.style.backgroundColor = "yellow";
 
             cell_elt.addEventListener("keydown", function(e) {
-                var key = e.which || e.keyCode;
-                if (key === 13) {
-                    e.stopPropagation();
-                    e.preventDefault();
-
+                if (e.keyCode == 10 || e.keyCode == 13) {
                     var new_value = cell_elt.innerHTML;
                     if (new_value != null) {
                         data[row][column] = new_value;
@@ -290,6 +286,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         data_elt.value = JSON.stringify(data);
                         event.target.innerHTML = new_value;
                         json = data_elt.value;
+                        alert(json);//==>>>>>>>>>>>>>>>>>>
                     }
                     var sheet_name = getUrlParameter('name');
                     var sheet_code = getUrlParameter('code');
@@ -309,8 +306,10 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     } else {
                         xhr.send(encodeURI('code='+ sheet_code +'&data=' + json)); 
                     }
+                    e.stopPropagation();
+                    e.preventDefault();
                 }
-                e.currentTarget.removeEventListener(e.type, handler);
+                //e.currentTarget.removeEventListener(e.type, handler);
             });
             cell_elt.addEventListener("blur", function handler(e) {
                 var new_value = cell_elt.innerHTML;
