@@ -76,7 +76,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var delete_button = "";
         var pre_delete_button = "";
         if (self.mode == 'write') {
-            table += "<div id='myStatus' style='color: red;'>You may use 'Enter' key to save data</div><input id='" + self.data_id+ "' type='hidden' " +
+            table += "<div id='myStatus' style='color: red;'>You may use 'Enter' key to save data or calculate like '=avg(A1:A3)'</div><input id='" + self.data_id+ "' type='hidden' " +
                 "name='" + self.data_name + "' value='" + JSON.stringify(
                 data)+ "' />";
             add_button = "<button>+</button>";
@@ -138,6 +138,7 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         }
         location = self.skipWhitespace(cell_expression, location);
         out[0] = location;
+        
         if(cell_expression.charAt(location) == "(") {
             left_out = self.evaluateCell(cell_expression, location + 1);
             if (!['+', '-', '*', '/'].includes(
@@ -261,6 +262,9 @@ function Spreadsheet(spreadsheet_id, supplied_data)
         var width = data[0].length;
         var json = "";
         var flag = false;
+        function nextChar(c) {
+            return String.fromCharCode(c.charCodeAt(0) + 1);
+        }
         function getUrlParameter(param) {
             var pattern = new RegExp('[?&]'+param+'((=([^&]*))|(?=(&|$)))','i');
             var m = window.location.search.match(pattern);
@@ -286,7 +290,44 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         data_elt.value = JSON.stringify(data);
                         // Added evaluateCell right away
                         if (new_value.charAt(0) == '=') {
-                            new_value = self.evaluateCell(new_value.substring(1), 0)[1];
+                            if(new_value.substring(1,5) == "avg(") {
+                                start = new_value.substring(5,7);
+                                end = new_value.substring(8,10);
+                                if (start !== null && end !== null) { 
+                                    tmp = start;
+                                    numAry = [];
+                                    numAry.push(tmp);
+                                    if (start == end) {
+                                        row_col = self.cellNameAsRowColumn(start.toString().trim());
+                                        console.log("same");
+                                        cell = document.getElementById(self.cell_id + "_" + (row_col[0] - 1) + "_" + row_col[1]);
+                                        new_value = parseInt(cell.innerHTML);
+                                    } else if (start.charAt(1) == end.charAt(1)) {
+                                        do {
+                                            str = tmp.charAt(0);
+                                            str = nextChar(str);
+                                            tmp = str + tmp.charAt(1);
+                                            numAry.push(tmp);
+                                        } while(tmp != end)
+                                    } else if (start.charAt(0) == end.charAt(0)) {
+                                        do {
+                                            num = parseInt(tmp.charAt(1));
+                                            num = num + 1;
+                                            tmp = tmp.charAt(0) + num;
+                                            numAry.push(tmp);
+                                        } while(tmp != end)
+                                    }
+                                    sum = 0;
+                                    for (i = 0; i < numAry.length; i++) {
+                                        row_col = self.cellNameAsRowColumn(numAry[i].toString().trim());
+                                        cell = document.getElementById(self.cell_id + "_" + (row_col[0] - 1) + "_" + row_col[1]);
+                                        sum += parseInt(cell.innerHTML);
+                                    }
+                                    new_value = sum / numAry.length;
+                                }
+                            } else {
+                                new_value = self.evaluateCell(new_value.substring(1), 0)[1]; 
+                            }
                         }
                         event.target.innerHTML = new_value;
                         json = data_elt.value;
