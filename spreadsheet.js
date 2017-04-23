@@ -284,6 +284,10 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                         data[row][column] = new_value;
                         data_elt = document.getElementById(self.data_id);
                         data_elt.value = JSON.stringify(data);
+                        // Added evaluateCell right away
+                        if (new_value.charAt(0) == '=') {
+                            new_value = self.evaluateCell(new_value.substring(1), 0)[1];
+                        }
                         event.target.innerHTML = new_value;
                         json = data_elt.value;
                     }
@@ -313,6 +317,10 @@ function Spreadsheet(spreadsheet_id, supplied_data)
                     data[row][column] = new_value;
                     data_elt = document.getElementById(self.data_id);
                     data_elt.value = JSON.stringify(data);
+                    // Added evaluateCell right away
+                    if (new_value.charAt(0) == '=') {
+                        new_value = self.evaluateCell(new_value.substring(1), 0)[1];
+                    }
                     event.target.innerHTML = new_value;
                     json = data_elt.value;
                 }
