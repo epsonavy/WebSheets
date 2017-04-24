@@ -59,8 +59,8 @@ $logger->info('My logger is now ready');
 */
 
 // Web page debug use only
-ini_set('display_errors', 1);
-error_reporting(~0);
+// ini_set('display_errors', 1);
+// error_reporting(~0);
 
 if (isset($_REQUEST['c'])) {
     $controller = $_REQUEST['c'];
