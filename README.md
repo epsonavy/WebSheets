@@ -17,6 +17,7 @@ or
 
 ## Database setup required
 
+First, make sure MySQL datebase setting is corret in file config.php (in src/configs directory)
+
 Run command line "php CreateDb.php" (in src/configs directory)
 
-Make sure MySQL datebase setting is corret in file config.php (in src/configs directory)
