@@ -4,10 +4,11 @@ Lets users create and share spreadsheets on the web
 
 ## To install composer
 
-command line "php composer.phar install"
+In the terminal, enter "curl -sS https://getcomposer.org/installer | php"
 
+then enter "php composer.phar install"
 
-## Please execute below command line to install all dependencies
+## Please execute below command line to install all composer dependencies
 
 ```composer install ```
 

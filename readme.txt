@@ -6,13 +6,15 @@ Name: Pei Liu        Student ID: 010200255
 Name: Xincheng Yuan  Student ID: 008452899
 Name: Yitao Zhao     Student ID: 009805302
 
+our project github link: https://github.com/epsonavy/WebSheets
 
 ## To install composer
 
-command line "php composer.phar install"
+In the terminal, enter "curl -sS https://getcomposer.org/installer | php"
 
+then enter "php composer.phar install"
 
-## Please execute below command line to install all dependencies
+## Please execute below command line to install all composer dependencies
 
 composer install
 
