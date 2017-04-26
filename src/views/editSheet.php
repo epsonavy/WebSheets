@@ -10,18 +10,18 @@ require_once('helpers/sheetEditable.php');
 require_once('layouts/beginLayout.php');
 require_once('layouts/endLayout.php');
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+
 class EditSheetView extends View {
 	public function render($data) {
-		
-		/*/dummy data for testing
-		$data[0] = "dummy title";
-		$data[1] = "[[\"Peter\", \"50\"],[\"Kevin\", \"6\"]]";
-		$data[2] = "Edit";
-		$data[3] = "12345678";
-		$data[4] = "Read";
-		$data[5] = "12345678";
-		$data[6] = "File";
-		$data[7] = "12345678";*/
+		// Create the logger
+		$logger = new Logger('my_logger');
+		// Now add some handlers
+		$logger->pushHandler(new StreamHandler('app_data/my_app.log', Logger::DEBUG));
+		// You can now use your logger
+		$logger->info('Visited edit sheet page');
 
 		$h1 = new \nighthawk\hw4\elements\H1();
 		$link = new \nighthawk\hw4\elements\Link();

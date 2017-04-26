@@ -10,14 +10,19 @@ require_once('helpers/sheet.php');
 require_once('layouts/beginLayout.php');
 require_once('layouts/endLayout.php');
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+
 class ReadSheetView extends View {
 	public function render($data) {
 		
-		/*dummy data for testing
-		$data[0] = "dummy title";
-		$data[1] = "[[\"Peter\", \"50\"],[\"Kevin\", \"6\"]]";
-		$data[2] = "File";
-		$data[3] = "12345678";*/
+		// Create the logger
+		$logger = new Logger('my_logger');
+		// Now add some handlers
+		$logger->pushHandler(new StreamHandler('app_data/my_app.log', Logger::DEBUG));
+		// You can now use your logger
+		$logger->info('Visited read sheet page');
 
 		$h1 = new \nighthawk\hw4\elements\H1();
 		$link = new \nighthawk\hw4\elements\Link();
